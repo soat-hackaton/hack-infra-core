@@ -1,4 +1,4 @@
-name: 'Terraform Hack Infra'
+name: 'Esteira CI/CD'
 
 on:
   push:
@@ -54,7 +54,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform plan -input=false -var="s3_bucket_name=${{ vars.S3_BUCKET_NAME }}" -var="dynamo_table_name=${{ vars.DYNAMO_TABLE_NAME }}"
+        run: terraform plan -input=false"
 
   # 3. Job de Aplicação
   apply:
@@ -77,4 +77,4 @@ jobs:
         run: terraform init
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve -input=false -var="s3_bucket_name=${{ vars.S3_BUCKET_NAME }}" -var="dynamo_table_name=${{ vars.DYNAMO_TABLE_NAME }}"
+        run: terraform apply -auto-approve -input=false"
