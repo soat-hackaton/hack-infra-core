@@ -1,0 +1,43 @@
+name: 'Terraform Hack Infra'
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    name: 'Terraform Apply'
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ./envs/dev
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+        aws-region: us-west-2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Format
+      run: terraform fmt
+
+    - name: Terraform Plan
+      run: terraform plan -input=false -var="s3_bucket_name=${{ vars.S3_BUCKET_NAME }}" -var="dynamo_table_name=${{ vars.DYNAMO_TABLE_NAME }}"
+
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/main'
+      run: terraform apply -auto-approve -input=false -var="s3_bucket_name=${{ vars.S3_BUCKET_NAME }}" -var="dynamo_table_name=${{ vars.DYNAMO_TABLE_NAME }}"
