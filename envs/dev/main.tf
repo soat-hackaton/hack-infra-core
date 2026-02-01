@@ -1,3 +1,7 @@
+provider "aws" {
+  region = var.aws_region
+}
+
 # --- Módulo S3 ---
 module "video_bucket" {
   source = "../../modules/s3"
