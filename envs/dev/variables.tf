@@ -21,3 +21,15 @@ variable "aws_region" {
   type        = string
   default     = "us-west-2" # Oregon
 }
+
+variable "lab_role_arn" {
+  description = "ARN da Role do Academy"
+  type        = string
+  default     = "arn:aws:iam::948109974561:role/LabRole" 
+}
+
+variable "principal_arn" {
+  description = "ARN do usuário logado (voclabs)"
+  type        = string
+  default     = "arn:aws:iam::948109974561:role/voclabs"
+}

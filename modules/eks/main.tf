@@ -1,71 +1,26 @@
-# 1. IAM Role para o Cluster
-resource "aws_iam_role" "cluster_role" {
-  name = "${var.cluster_name}-cluster-role"
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
-      Principal = { Service = "eks.amazonaws.com" }
-    }]
-  })
-  tags = var.tags
-}
-
-resource "aws_iam_role_policy_attachment" "cluster_policy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = aws_iam_role.cluster_role.name
-}
-
-# 2. IAM Role para os Nodes
-resource "aws_iam_role" "node_role" {
-  name = "${var.cluster_name}-node-role"
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
-      Principal = { Service = "ec2.amazonaws.com" }
-    }]
-  })
-  tags = var.tags
-}
-
-resource "aws_iam_role_policy_attachment" "node_worker_policy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-  role       = aws_iam_role.node_role.name
-}
-
-resource "aws_iam_role_policy_attachment" "node_cni_policy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-  role       = aws_iam_role.node_role.name
-}
-
-resource "aws_iam_role_policy_attachment" "node_registry_policy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-  role       = aws_iam_role.node_role.name
-}
-
-# 3. Cluster EKS
+# 1. Cluster EKS
 resource "aws_eks_cluster" "this" {
   name     = var.cluster_name
-  role_arn = aws_iam_role.cluster_role.arn
-  version  = "1.31"
+  role_arn = var.lab_role_arn
+  version  = "1.30"
 
   vpc_config {
     subnet_ids = var.subnet_ids
     endpoint_public_access = true
   }
 
-  depends_on = [aws_iam_role_policy_attachment.cluster_policy]
-  tags       = var.tags
+  access_config {
+    authentication_mode = "API_AND_CONFIG_MAP"
+  }
+
+  tags = var.tags
 }
 
-# 4. Node Group
+# 2. Node Group
 resource "aws_eks_node_group" "this" {
   cluster_name    = aws_eks_cluster.this.name
   node_group_name = "${var.cluster_name}-node-group"
-  node_role_arn   = aws_iam_role.node_role.arn
+  node_role_arn   = var.lab_role_arn
   subnet_ids      = var.subnet_ids
 
   scaling_config {
@@ -74,12 +29,27 @@ resource "aws_eks_node_group" "this" {
     min_size     = 1
   }
 
-  instance_types = ["t3.medium"]
+  instance_types = [var.instance_type]
 
-  depends_on = [
-    aws_iam_role_policy_attachment.node_worker_policy,
-    aws_iam_role_policy_attachment.node_cni_policy,
-    aws_iam_role_policy_attachment.node_registry_policy,
-  ]
   tags = var.tags
+}
+
+# 3. Configuração de Acesso
+
+# Define QUEM pode acessar (Você/voclabs)
+resource "aws_eks_access_entry" "admin" {
+  cluster_name  = aws_eks_cluster.this.name
+  principal_arn = var.principal_arn
+  type          = "STANDARD"
+}
+
+# Define O QUE ele pode fazer (Admin)
+resource "aws_eks_access_policy_association" "admin_policy" {
+  cluster_name  = aws_eks_cluster.this.name
+  policy_arn    = var.access_policy_arn
+  principal_arn = aws_eks_access_entry.admin.principal_arn
+
+  access_scope {
+    type = "cluster"
+  }
 }

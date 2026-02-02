@@ -56,9 +56,13 @@ module "eks_cluster" {
   source = "../../modules/eks"
   cluster_name = "hack-infra-eks"
   
-  # Aqui usamos as subnets que vieram do outro projeto
-  vpc_id     = local.vpc_id
-  subnet_ids = local.node_subnet_ids 
+  vpc_id       = local.vpc_id
+  subnet_ids   = local.cluster_subnet_ids
+
+  # AWS Academy Configs
+  lab_role_arn  = var.lab_role_arn
+  principal_arn = var.principal_arn
+  instance_type = "t3.medium"
   
   tags = { Environment = "dev", Project = "hack-video-ingest" }
 }
