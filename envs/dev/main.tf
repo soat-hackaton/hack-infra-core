@@ -56,7 +56,6 @@ module "eks_cluster" {
   source = "../../modules/eks"
   cluster_name = "hack-infra-eks"
   
-  vpc_id       = local.vpc_id
   subnet_ids   = local.cluster_subnet_ids
 
   # AWS Academy Configs
