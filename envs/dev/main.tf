@@ -36,10 +36,10 @@ module "video_metadata_table" {
   tags       = { Environment = "dev", Project = "hackaton" }
 }
 
-module "auth_table" {
+module "users_table" {
   source = "../../modules/dynamo"
 
-  table_name = var.auth_dynamo_table_name
+  table_name = var.users_dynamo_table_name
   tags       = { Environment = "dev", Project = "hackaton" }
 }
 

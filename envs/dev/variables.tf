@@ -12,10 +12,10 @@ variable "video_dynamo_table_name" {
   default     = "hack-video-processing-db"
 }
 
-variable "auth_dynamo_table_name" {
-  description = "Nome da tabela de metadados"
+variable "users_dynamo_table_name" {
+  description = "Nome da tabela de usuários"
   type        = string
-  default     = "hack-auth-db"
+  default     = "hack-users-db"
 }
 
 # SQS

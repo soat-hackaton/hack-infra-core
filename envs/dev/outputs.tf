@@ -8,8 +8,8 @@ output "metadata_table_name" {
   value = module.video_metadata_table.table_name
 }
 
-output "auth_table_name" {
-  value = module.auth_table.table_name
+output "users_table_name" {
+  value = module.users_table.table_name
 }
 
 # SQS
