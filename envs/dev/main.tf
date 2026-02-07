@@ -25,15 +25,22 @@ module "video_bucket" {
   source = "../../modules/s3"
 
   bucket_name = var.s3_bucket_name
-  tags        = { Environment = "dev", Project = "hack-video-ingest" }
+  tags        = { Environment = "dev", Project = "hackaton" }
 }
 
 # --- Módulo DynamoDB ---
 module "video_metadata_table" {
   source = "../../modules/dynamo"
 
-  table_name = var.dynamo_table_name
-  tags       = { Environment = "dev", Project = "hack-video-ingest" }
+  table_name = var.video_dynamo_table_name
+  tags       = { Environment = "dev", Project = "hackaton" }
+}
+
+module "auth_table" {
+  source = "../../modules/dynamo"
+
+  table_name = var.auth_dynamo_table_name
+  tags       = { Environment = "dev", Project = "hackaton" }
 }
 
 # --- Módulo SQS ---
@@ -41,14 +48,20 @@ module "video_queue" {
   source = "../../modules/sqs"
 
   queue_name = var.sqs_queue_name
-  tags       = { Environment = "dev", Project = "hack-video-ingest" }
+  tags       = { Environment = "dev", Project = "hackaton" }
 }
 
 # --- Módulo ECR ---
 module "video_ecr" {
   source = "../../modules/ecr"
   repository_name = "hack-video-ingest"
-  tags            = { Environment = "dev", Project = "hack-video-ingest" }
+  tags            = { Environment = "dev", Project = "hackaton" }
+}
+
+module "auth_ecr" {
+  source = "../../modules/ecr"
+  repository_name = "hack-auth"
+  tags            = { Environment = "dev", Project = "hackaton" }
 }
 
 # --- Módulo EKS ---
@@ -63,5 +76,5 @@ module "eks_cluster" {
   principal_arn = var.principal_arn
   instance_type = "t3.medium"
   
-  tags = { Environment = "dev", Project = "hack-video-ingest" }
+  tags = { Environment = "dev", Project = "hackaton" }
 }
