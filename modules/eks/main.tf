@@ -53,3 +53,15 @@ resource "aws_eks_access_policy_association" "admin_policy" {
     type = "cluster"
   }
 }
+
+# Permitir acessar os logs usando CloudWatch
+resource "aws_eks_addon" "cloudwatch_observability" {
+  cluster_name = aws_eks_cluster.this.name
+  addon_name   = "amazon-cloudwatch-observability"
+  
+  # Deixe a AWS gerenciar a versão compatível automaticamente
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
+
+  tags = var.tags
+}
