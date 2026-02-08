@@ -29,6 +29,16 @@ output "auth_ecr_repository_url" {
   value       = module.auth_ecr.repository_url
 }
 
+output "transcoder_ecr_repository_url" {
+  description = "URL do ECR para push da imagem"
+  value       = module.transcoder_ecr.repository_url
+}
+
+output "worker_ecr_repository_url" {
+  description = "URL do ECR para push da imagem"
+  value       = module.worker_ecr.repository_url
+}
+
 # EKS
 output "eks_cluster_name" {
   description = "Nome do Cluster EKS"

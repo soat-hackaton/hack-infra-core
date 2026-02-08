@@ -53,28 +53,40 @@ module "video_queue" {
 
 # --- Módulo ECR ---
 module "video_ecr" {
-  source = "../../modules/ecr"
+  source          = "../../modules/ecr"
   repository_name = "hack-video-ingest"
   tags            = { Environment = "dev", Project = "hackaton" }
 }
 
 module "auth_ecr" {
-  source = "../../modules/ecr"
+  source          = "../../modules/ecr"
   repository_name = "hack-auth"
+  tags            = { Environment = "dev", Project = "hackaton" }
+}
+
+module "transcoder_ecr" {
+  source          = "../../modules/ecr"
+  repository_name = "hack-video-transcoder"
+  tags            = { Environment = "dev", Project = "hackaton" }
+}
+
+module "worker_ecr" {
+  source          = "../../modules/ecr"
+  repository_name = "hack-video-worker"
   tags            = { Environment = "dev", Project = "hackaton" }
 }
 
 # --- Módulo EKS ---
 module "eks_cluster" {
-  source = "../../modules/eks"
+  source       = "../../modules/eks"
   cluster_name = "hack-infra-eks"
-  
-  subnet_ids   = local.cluster_subnet_ids
+
+  subnet_ids = local.cluster_subnet_ids
 
   # AWS Academy Configs
   lab_role_arn  = var.lab_role_arn
   principal_arn = var.principal_arn
   instance_type = "t3.medium"
-  
+
   tags = { Environment = "dev", Project = "hackaton" }
 }
