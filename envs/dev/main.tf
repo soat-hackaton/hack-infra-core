@@ -76,6 +76,12 @@ module "worker_ecr" {
   tags            = { Environment = "dev", Project = "hackaton" }
 }
 
+module "frontend_ecr" {
+  source          = "../../modules/ecr"
+  repository_name = "hack-frontend"
+  tags            = { Environment = "dev", Project = "hackaton" }
+}
+
 # --- Módulo EKS ---
 module "eks_cluster" {
   source       = "../../modules/eks"

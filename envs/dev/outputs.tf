@@ -39,6 +39,11 @@ output "worker_ecr_repository_url" {
   value       = module.worker_ecr.repository_url
 }
 
+output "frontend_ecr_repository_url" {
+  description = "URL do ECR para push da imagem"
+  value       = module.frontend_ecr.repository_url
+}
+
 # EKS
 output "eks_cluster_name" {
   description = "Nome do Cluster EKS"
