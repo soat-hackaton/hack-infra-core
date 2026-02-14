@@ -39,7 +39,7 @@ module "video_metadata_table" {
     { name = "user_email", type = "S" },
     { name = "created_at", type = "S" }
   ]
-\
+  
   global_secondary_indexes = [
     {
       name            = "UserEmailIndex"
