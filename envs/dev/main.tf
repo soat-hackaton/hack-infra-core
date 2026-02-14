@@ -34,6 +34,20 @@ module "video_metadata_table" {
 
   table_name = var.video_dynamo_table_name
   tags       = { Environment = "dev", Project = "hackaton" }
+
+  additional_attributes = [
+    { name = "user_email", type = "S" },
+    { name = "created_at", type = "S" }
+  ]
+\
+  global_secondary_indexes = [
+    {
+      name            = "UserEmailIndex"
+      hash_key        = "user_email"
+      range_key       = "created_at"
+      projection_type = "ALL"
+    }
+  ]
 }
 
 module "users_table" {
