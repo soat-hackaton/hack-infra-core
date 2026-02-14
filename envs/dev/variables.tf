@@ -18,26 +18,6 @@ variable "users_dynamo_table_name" {
   default     = "hack-users-db"
 }
 
-variable "global_secondary_indexes" {
-  description = "Lista de GSIs para criar na tabela"
-  type = list(object({
-    name               = string
-    hash_key           = string
-    range_key          = optional(string)
-    projection_type    = string
-  }))
-  default = []
-}
-
-variable "additional_attributes" {
-  description = "Atributos extras necessários para os índices (além de PK e SK)"
-  type = list(object({
-    name = string
-    type = string
-  }))
-  default = []
-}
-
 # SQS
 variable "sqs_queue_name" {
   description = "Nome da fila SQS"
