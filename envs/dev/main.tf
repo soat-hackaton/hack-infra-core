@@ -106,7 +106,7 @@ module "eks_cluster" {
   # AWS Academy Configs
   lab_role_arn  = var.lab_role_arn
   principal_arn = var.principal_arn
-  instance_type = "t3.medium"
+  instance_type = "t3.xlarge"
 
   tags = { Environment = "dev", Project = "hackaton" }
 }
