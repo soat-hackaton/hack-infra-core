@@ -104,8 +104,8 @@ module "eks_cluster" {
   subnet_ids = local.cluster_subnet_ids
 
   # AWS Academy Configs
-  lab_role_arn  = var.lab_role_arn
-  principal_arn = var.principal_arn
+  lab_role_arn  = "arn:aws:iam::${var.aws_account_id}:role/LabRole"
+  principal_arn = "arn:aws:iam::${var.aws_account_id}:role/voclabs"
   instance_type = "t3.xlarge"
 
   tags = { Environment = "dev", Project = "hackaton" }

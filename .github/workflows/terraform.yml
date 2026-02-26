@@ -11,6 +11,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
   AWS_REGION: 'us-west-2'
+  TF_VAR_aws_account_id: ${{ secrets.AWS_ACCOUNT_ID }}
 
 jobs:
   # 1. Job de Validação
