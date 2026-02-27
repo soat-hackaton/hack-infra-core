@@ -106,7 +106,7 @@ module "eks_cluster" {
   # AWS Academy Configs
   lab_role_arn  = "arn:aws:iam::${var.aws_account_id}:role/LabRole"
   principal_arn = "arn:aws:iam::${var.aws_account_id}:role/voclabs"
-  instance_type = "t3.xlarge"
+  instance_type = "c6a.xlarge" # Otimizada para computação
 
   tags = { Environment = "dev", Project = "hackaton" }
 }
